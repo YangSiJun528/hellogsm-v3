@@ -1,0 +1,42 @@
+## local ?? ??
+server:
+  port: 8081
+  shutdown: graceful
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    session:
+      timeout: 1440m  # 1 day
+      cookie:
+        domain: localhost
+        max-age: 1440m # 1 day
+        name: SESSION
+spring:
+  session:
+    redis:
+      repository-type: default
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+## docker compose support ? ???? ??? ??? db ??? ????.
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/hellogsm
+#    password: verysecret
+#    username: myuser
+#  data:
+#    redis:
+#      host: localhost:6379
+#      port: 6379
+
+#logging:
+#  level:
+#    root: debug
+
+
+
+## https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.spring-session ??
+## https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#appendix.application-properties.server ??

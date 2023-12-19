@@ -8,15 +8,17 @@ server:
       enabled: true
       force: true
     session:
-      timeout: 1440m  # 1 day
+      timeout: 36000 # sec, 10 hour
       cookie:
         domain: localhost
         max-age: 1440m # 1 day
         name: SESSION
 spring:
   session:
+    store-type: redis
     redis:
-      repository-type: default
+      flush-mode: ON_SAVE
+      namespace: hellogsm:session
   jpa:
     database: mysql
     show-sql: true

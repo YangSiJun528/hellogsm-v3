@@ -1,35 +1,61 @@
 package team.themomnet.hellogsm.core.domain.application.model;
 
-import org.jetbrains.annotations.Nullable;
+import jakarta.annotation.Nullable;
 import team.themomnet.hellogsm.core.domain.type.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.concurrent.Future;
 
-public class GraduateApplication extends AbstractApplication {
+public final class GraduateApplication extends AbstractApplication {
 
-    protected GraduateApplication(GraduateApplication.GraduatePersonalInformation personalInformation, GraduateApplication.GraduateGradeCard gradeCard, Future<String> aa, Boolean finalSubmitted, Boolean printsArrived, @Nullable Evaluation subjectEvaluation, @Nullable Evaluation competencyEvaluation, @Nullable Long registrationNumber, DesiredMajors desiredMajors, Major finalMajor) {
-        super(personalInformation, gradeCard, aa, finalSubmitted, printsArrived, subjectEvaluation, competencyEvaluation, registrationNumber, desiredMajors, finalMajor);
+  private GraduateApplication(GraduateApplication.GraduatePersonalInformation personalInformation,
+      GraduateMiddleSchoolGrade gradeCard, Boolean finalSubmitted,
+      Boolean printsArrived, @Nullable Evaluation subjectEvaluation,
+      @Nullable Evaluation competencyEvaluation, @Nullable Long registrationNumber,
+      DesiredMajors desiredMajors, Major finalMajor) {
+    super(personalInformation, gradeCard, finalSubmitted, printsArrived,
+        subjectEvaluation, competencyEvaluation, registrationNumber, desiredMajors, finalMajor);
+  }
+
+  public static final class GraduatePersonalInformation extends AbstractPersonalInformation {
+
+    private final String schoolName;
+
+    private final String schoolLocation;
+
+    private final String teacherName;
+
+    private final String teacherPhoneNumber;
+
+    private GraduatePersonalInformation(String applicantImageUri, String applicantName,
+        Gender applicantGender, LocalDate applicantBirth, String address, String detailAddress,
+        GraduationStatus graduation, String telephone, String applicantPhoneNumber,
+        String guardianName, String relationWithApplicant, String schoolName, String schoolLocation,
+        String teacherName, String teacherPhoneNumber) {
+      super(applicantImageUri, applicantName, applicantGender, applicantBirth, address,
+          detailAddress, graduation, telephone, applicantPhoneNumber, guardianName,
+          relationWithApplicant);
+      this.schoolName = schoolName;
+      this.schoolLocation = schoolLocation;
+      this.teacherName = teacherName;
+      this.teacherPhoneNumber = teacherPhoneNumber;
     }
 
-    public static class GraduatePersonalInformation extends AbstractPersonalInformation {
-        private final String schoolName;
+  }
 
-        private final String schoolLocation;
+  public static final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-        private final String teacherName;
+    private final BigDecimal attendanceScore; // 출석 점수
 
-        private final String teacherPhoneNumber;
+    private final BigDecimal volunteerScore; // 봉사 점수
 
-        protected GraduatePersonalInformation(String applicantImageUri, String applicantName, Gender applicantGender, LocalDate applicantBirth, String address, String detailAddress, GraduationStatus graduation, String telephone, String applicantPhoneNumber, String guardianName, String relationWithApplicant, String schoolName, String schoolLocation, String teacherName, String teacherPhoneNumber) {
-            super(applicantImageUri, applicantName, applicantGender, applicantBirth, address, detailAddress, graduation, telephone, applicantPhoneNumber, guardianName, relationWithApplicant);
-            this.schoolName = schoolName;
-            this.schoolLocation = schoolLocation;
-            this.teacherName = teacherName;
-            this.teacherPhoneNumber = teacherPhoneNumber;
-        }
+    public GraduateMiddleSchoolGrade(BigDecimal percentileRank, BigDecimal attendanceScore,
+        BigDecimal volunteerScore) {
+      super(percentileRank);
+      this.attendanceScore = attendanceScore;
+      this.volunteerScore = volunteerScore;
     }
 
-    public static class GraduateGradeCard extends AbstractGradeCard {
-    }
+  }
+
 }

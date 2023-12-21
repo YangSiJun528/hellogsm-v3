@@ -8,26 +8,31 @@ import team.themomnet.hellogsm.core.domain.type.GraduationStatus;
 import java.time.LocalDate;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class AbstractPersonalInformation {
-    private final String applicantImageUri;
+public abstract sealed class AbstractPersonalInformation permits
+    CandidateApplication.CandidatePersonalInformation,
+    GraduateApplication.GraduatePersonalInformation,
+    GedApplication.GedPersonalInformation {
 
-    private final String applicantName;
+  protected final String applicantImageUri;
 
-    private final Gender applicantGender;
+  protected final String applicantName;
 
-    private final LocalDate applicantBirth;
+  protected final Gender applicantGender;
 
-    private final String address;
+  protected final LocalDate applicantBirth;
 
-    private final String detailAddress;
+  protected final String address;
 
-    private final GraduationStatus graduation;
+  protected final String detailAddress;
 
-    private final String telephone;
+  protected final GraduationStatus graduation;
 
-    private final String applicantPhoneNumber;
+  protected final String telephone;
 
-    private final String guardianName;
+  protected final String applicantPhoneNumber;
 
-    private final String relationWithApplicant;
+  protected final String guardianName;
+
+  protected final String relationWithApplicant;
+
 }

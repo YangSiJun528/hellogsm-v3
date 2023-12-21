@@ -1,20 +1,12 @@
 package team.themomnet.hellogsm.core.domain.application.model;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
-import java.io.IOException;
-import java.util.ArrayList;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import team.themomnet.hellogsm.core.domain.type.*;
 
 import java.math.BigDecimal;
@@ -109,24 +101,44 @@ public final class CandidateApplication extends AbstractApplication {
   }
 
 
-  @JsonIgnoreProperties(ignoreUnknown = true)
+  /*
+   * grades과 semesters는 다음과 같은 형식의 데이터를 가짐
+   *  {
+   *    "grades": {
+   *      "국어": {
+   *        "1-1": 19,
+   *        "1-2": 10,
+   *        "2-1": 43,
+   *        "2-2": 98,
+   *        "3-1": 66
+   *    },
+   *  ...
+   *      "영어": {
+   *        "1-1": 67,
+   *        "1-2": 66,
+   *        "2-1": 46,
+   *        "2-2": 60,
+   *        "3-1": 54
+   *      }
+   *    },
+   *    "semesters": [
+   *      "1-1",
+   *      "1-2",
+   *      "2-1",
+   *      "2-2",
+   *      "3-1"
+   *    ]
+   *  }
+   */
   public static class MiddleSchoolTranscript {
 
     private final Map<String, Map<String, Integer>> grades;
+
     private final List<String> semesters;
 
-    // Default constructor
-    public MiddleSchoolTranscript() {
-      this.grades = new HashMap<>();
-      this.semesters = new ArrayList<>();
-    }
-
-    // Constructor for deserialization
-    @JsonCreator
-    public MiddleSchoolTranscript(@JsonProperty("grades") Map<String, Map<String, Integer>> initialGrades,
-        @JsonProperty("semesters") List<String> initialSemesters) {
-      this.grades = (initialGrades != null) ? new HashMap<>(initialGrades) : new HashMap<>();
-      this.semesters = (initialSemesters != null) ? new ArrayList<>(initialSemesters) : new ArrayList<>();
+    public MiddleSchoolTranscript(@NotNull Map<String, Map<String, Integer>> grades, @NotNull List<String> semesters) {
+      this.grades = grades;
+      this.semesters = semesters;
     }
 
     public Map<String, Integer> getGradesForSubject(String subject) {
@@ -144,21 +156,8 @@ public final class CandidateApplication extends AbstractApplication {
       return Collections.unmodifiableList(semesters);
     }
 
-    @JsonGetter // com.fasterxml.jackson 의존성 생김 - 괜찮나?
     public Map<String, Map<String, Integer>> getGrades() {
-      return grades;
-    }
-
-    @JsonSetter // setter 메서드 추가
-    public void setGrades(Map<String, Map<String, Integer>> grades) {
-      this.grades.clear();
-      this.grades.putAll(grades);
-    }
-
-    @JsonCreator
-    public static MiddleSchoolTranscript createFromJson(@JsonProperty("grades") Map<String, Map<String, Integer>> grades,
-        @JsonProperty("semesters") List<String> semesters) {
-      return new MiddleSchoolTranscript(grades, semesters);
+      return Collections.unmodifiableMap(grades);
     }
 
   }

@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import org.junit.jupiter.api.function.Executable;
-import team.themomnet.hellogsm.core.domain.application.model.CandidateApplication.MiddleSchoolTranscript;
-import team.themomnet.hellogsm.core.domain.application.model.CandidateApplication.SemesterType;
+import team.themomnet.hellogsm.core.domain.type.SemesterType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,35 +1,23 @@
 package team.themomnet.hellogsm.core.domain.application.model;
 
-import jakarta.annotation.Nullable;
-import team.themomnet.hellogsm.core.domain.type.*;
+import lombok.NonNull;
+import team.themomnet.hellogsm.core.domain.application.model.param.AbstractApplicationParameter;
+import team.themomnet.hellogsm.core.domain.application.model.param.AbstractPersonalInformationParameter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public final class GedApplication extends AbstractApplication {
 
-  private GedApplication(GedPersonalInformation personalInformation, GedMiddleSchoolGrade gradeCard,
-      Boolean finalSubmitted,
-      Boolean printsArrived, @Nullable Evaluation subjectEvaluation,
-      @Nullable Evaluation competencyEvaluation, @Nullable Long registrationNumber,
-      DesiredMajors desiredMajors, Major finalMajor) {
-    super(personalInformation, gradeCard, finalSubmitted, printsArrived,
-        subjectEvaluation, competencyEvaluation, registrationNumber, desiredMajors, finalMajor);
+  private GedApplication(@NonNull AbstractApplicationParameter parameter) {
+    super(parameter);
   }
 
   public static final class GedPersonalInformation extends AbstractPersonalInformation {
+
     // 추가로 필요한 정보 없음
-
-
-    private GedPersonalInformation(String applicantImageUri, String applicantName,
-        Gender applicantGender, LocalDate applicantBirth, String address, String detailAddress,
-        GraduationStatus graduation, String telephone, String applicantPhoneNumber,
-        String guardianName, String relationWithApplicant) {
-      super(applicantImageUri, applicantName, applicantGender, applicantBirth, address,
-          detailAddress, graduation, telephone, applicantPhoneNumber, guardianName,
-          relationWithApplicant);
+    private GedPersonalInformation(@NonNull AbstractPersonalInformationParameter superParameter) {
+      super(superParameter);
     }
-
   }
 
   public static final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
@@ -38,13 +26,13 @@ public final class GedApplication extends AbstractApplication {
 
     private final BigDecimal gedMaxScore; // GED 시험 만점 - 과목수 * 100
 
-    public GedMiddleSchoolGrade(BigDecimal percentileRank, BigDecimal gedTotalScore,
-        BigDecimal gedMaxScore) {
+    public GedMiddleSchoolGrade(
+        @NonNull BigDecimal percentileRank,
+        @NonNull BigDecimal gedTotalScore,
+        @NonNull BigDecimal gedMaxScore) {
       super(percentileRank);
       this.gedTotalScore = gedTotalScore;
       this.gedMaxScore = gedMaxScore;
     }
-
   }
-
 }

@@ -1,20 +1,15 @@
 package team.themomnet.hellogsm.core.domain.application.model;
 
-import jakarta.annotation.Nullable;
-import team.themomnet.hellogsm.core.domain.type.*;
+import lombok.NonNull;
+import team.themomnet.hellogsm.core.domain.application.model.param.AbstractApplicationParameter;
+import team.themomnet.hellogsm.core.domain.application.model.param.AbstractPersonalInformationParameter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public final class GraduateApplication extends AbstractApplication {
 
-  private GraduateApplication(GraduateApplication.GraduatePersonalInformation personalInformation,
-      GraduateMiddleSchoolGrade gradeCard, Boolean finalSubmitted,
-      Boolean printsArrived, @Nullable Evaluation subjectEvaluation,
-      @Nullable Evaluation competencyEvaluation, @Nullable Long registrationNumber,
-      DesiredMajors desiredMajors, Major finalMajor) {
-    super(personalInformation, gradeCard, finalSubmitted, printsArrived,
-        subjectEvaluation, competencyEvaluation, registrationNumber, desiredMajors, finalMajor);
+  private GraduateApplication(AbstractApplicationParameter parameter) {
+    super(parameter);
   }
 
   public static final class GraduatePersonalInformation extends AbstractPersonalInformation {
@@ -27,20 +22,18 @@ public final class GraduateApplication extends AbstractApplication {
 
     private final String teacherPhoneNumber;
 
-    private GraduatePersonalInformation(String applicantImageUri, String applicantName,
-        Gender applicantGender, LocalDate applicantBirth, String address, String detailAddress,
-        GraduationStatus graduation, String telephone, String applicantPhoneNumber,
-        String guardianName, String relationWithApplicant, String schoolName, String schoolLocation,
-        String teacherName, String teacherPhoneNumber) {
-      super(applicantImageUri, applicantName, applicantGender, applicantBirth, address,
-          detailAddress, graduation, telephone, applicantPhoneNumber, guardianName,
-          relationWithApplicant);
+    GraduatePersonalInformation(
+        @NonNull AbstractPersonalInformationParameter superParameter,
+        @NonNull String schoolName,
+        @NonNull String schoolLocation,
+        @NonNull String teacherName,
+        @NonNull String teacherPhoneNumber) {
+      super(superParameter);
       this.schoolName = schoolName;
       this.schoolLocation = schoolLocation;
       this.teacherName = teacherName;
       this.teacherPhoneNumber = teacherPhoneNumber;
     }
-
   }
 
   public static final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
@@ -49,13 +42,13 @@ public final class GraduateApplication extends AbstractApplication {
 
     private final BigDecimal volunteerScore; // 봉사 점수
 
-    public GraduateMiddleSchoolGrade(BigDecimal percentileRank, BigDecimal attendanceScore,
-        BigDecimal volunteerScore) {
+    public GraduateMiddleSchoolGrade(
+        @NonNull BigDecimal percentileRank,
+        @NonNull BigDecimal attendanceScore,
+        @NonNull BigDecimal volunteerScore) {
       super(percentileRank);
       this.attendanceScore = attendanceScore;
       this.volunteerScore = volunteerScore;
     }
-
   }
-
 }

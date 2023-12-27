@@ -3,11 +3,12 @@ package team.themomnet.hellogsm.core.domain.application.model;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import team.themomnet.hellogsm.core.domain.application.model.param.AbstractApplicationParameter;
 import team.themomnet.hellogsm.core.domain.type.DesiredMajors;
 import team.themomnet.hellogsm.core.domain.type.Evaluation;
 import team.themomnet.hellogsm.core.domain.type.Major;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract sealed class AbstractApplication permits CandidateApplication, GraduateApplication,
     GedApplication {
 
@@ -36,4 +37,15 @@ public abstract sealed class AbstractApplication permits CandidateApplication, G
 
   protected final Major finalMajor; // 최종 전형, 최종 전형쳥가 이후에 전형을 가져아 함
 
+  protected AbstractApplication(@NonNull AbstractApplicationParameter parameter) {
+    this.personalInformation = parameter.getPersonalInformation();
+    this.gradeCard = parameter.getGradeCard();
+    this.finalSubmitted = parameter.getFinalSubmitted();
+    this.printsArrived = parameter.getPrintsArrived();
+    this.subjectEvaluation = parameter.getSubjectEvaluation();
+    this.competencyEvaluation = parameter.getCompetencyEvaluation();
+    this.registrationNumber = parameter.getRegistrationNumber();
+    this.desiredMajors = parameter.getDesiredMajors();
+    this.finalMajor = parameter.getFinalMajor();
+  }
 }

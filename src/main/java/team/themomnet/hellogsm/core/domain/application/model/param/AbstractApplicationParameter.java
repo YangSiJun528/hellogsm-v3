@@ -13,10 +13,6 @@ import team.themomnet.hellogsm.core.domain.type.Major;
 @Getter
 public class AbstractApplicationParameter {
 
-  protected final AbstractPersonalInformation personalInformation;
-
-  protected final AbstractMiddleSchoolGrade gradeCard;
-
   protected final Boolean finalSubmitted;
 
   protected final Boolean printsArrived;
@@ -35,8 +31,6 @@ public class AbstractApplicationParameter {
 
   @Builder
   public AbstractApplicationParameter(
-      @NonNull AbstractPersonalInformation personalInformation,
-      @NonNull AbstractMiddleSchoolGrade gradeCard,
       @NonNull Boolean finalSubmitted,
       @NonNull Boolean printsArrived,
       @Nullable Evaluation subjectEvaluation,
@@ -44,8 +38,6 @@ public class AbstractApplicationParameter {
       @Nullable Long registrationNumber,
       @NonNull DesiredMajors desiredMajors,
       @NonNull Major finalMajor) {
-    this.personalInformation = personalInformation;
-    this.gradeCard = gradeCard;
     this.finalSubmitted = finalSubmitted;
     this.printsArrived = printsArrived;
     this.subjectEvaluation = subjectEvaluation;

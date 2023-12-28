@@ -8,8 +8,11 @@ import java.math.BigDecimal;
 
 public final class GedApplication extends AbstractApplication {
 
-  private GedApplication(@NonNull AbstractApplicationParameter parameter) {
-    super(parameter);
+  private GedApplication(
+      @NonNull GedApplication.GedPersonalInformation personalInformation,
+      @NonNull GedApplication.GedMiddleSchoolGrade gradeCard,
+      @NonNull AbstractApplicationParameter parameter) {
+    super(personalInformation, gradeCard, parameter);
   }
 
   public static final class GedPersonalInformation extends AbstractPersonalInformation {
@@ -22,9 +25,9 @@ public final class GedApplication extends AbstractApplication {
 
   public static final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-    private BigDecimal gedTotalScore; // GED 시험 총점
+    private final BigDecimal gedTotalScore; // GED 시험 총점
 
-    private BigDecimal gedMaxScore; // GED 시험 만점 - 과목수 * 100
+    private final BigDecimal gedMaxScore; // GED 시험 만점 - 과목수 * 100
 
     public GedMiddleSchoolGrade(
         @NonNull BigDecimal percentileRank,

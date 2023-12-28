@@ -8,19 +8,22 @@ import java.math.BigDecimal;
 
 public final class GraduateApplication extends AbstractApplication {
 
-  private GraduateApplication(AbstractApplicationParameter parameter) {
-    super(parameter);
+  private GraduateApplication(
+      @NonNull GraduateApplication.GraduatePersonalInformation personalInformation,
+      @NonNull GraduateApplication.GraduateMiddleSchoolGrade gradeCard,
+      @NonNull AbstractApplicationParameter parameter) {
+    super(personalInformation, gradeCard, parameter);
   }
 
   public static final class GraduatePersonalInformation extends AbstractPersonalInformation {
 
-    private String schoolName;
+    private final String schoolName;
 
-    private String schoolLocation;
+    private final String schoolLocation;
 
-    private String teacherName;
+    private final String teacherName;
 
-    private String teacherPhoneNumber;
+    private final String teacherPhoneNumber;
 
     GraduatePersonalInformation(
         @NonNull AbstractPersonalInformationParameter superParameter,
@@ -38,9 +41,9 @@ public final class GraduateApplication extends AbstractApplication {
 
   public static final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-    private BigDecimal attendanceScore; // 출석 점수
+    private final BigDecimal attendanceScore; // 출석 점수
 
-    private BigDecimal volunteerScore; // 봉사 점수
+    private final BigDecimal volunteerScore; // 봉사 점수
 
     public GraduateMiddleSchoolGrade(
         @NonNull BigDecimal percentileRank,

@@ -41,25 +41,25 @@ import team.themomnet.hellogsm.core.domain.type.SemesterType;
  */
 public class MiddleSchoolTranscript {
 
-  public static final Set<String> CURRICULUM_DEFAULT_SUBJECTS = Set.of("국어", "도덕", "사회", "역사",
+  public static Set<String> CURRICULUM_DEFAULT_SUBJECTS = Set.of("국어", "도덕", "사회", "역사",
       "수학", "과학", "기술가정", "정보", "영어");
-  public static final Set<String> ART_SPORT_SUBJECTS = Set.of("체육", "음악", "미술");
-  public static final Set<String> NON_CURRICULUM_SUBJECTS = Set.of("결석", "지각", "조퇴", "결과",
+  public static Set<String> ART_SPORT_SUBJECTS = Set.of("체육", "음악", "미술");
+  public static Set<String> NON_CURRICULUM_SUBJECTS = Set.of("결석", "지각", "조퇴", "결과",
       "봉사활동(시간)");
-  public static final Set<String> ART_SPORT_KEY_SET = new HashSet<>(
+  public static Set<String> ART_SPORT_KEY_SET = new HashSet<>(
       Set.of(SemesterType.GRADE_2_1, SemesterType.GRADE_2_2, SemesterType.GRADE_3_1));
-  public static final Set<String> SCHOOL_YEAR = new HashSet<>(
+  public static Set<String> SCHOOL_YEAR = new HashSet<>(
       Set.of("1", "2", "3"));
 
-  private final Map<String, Map<String, CurricularScore>> generalCurriculumGrades;
+  private Map<String, Map<String, CurricularScore>> generalCurriculumGrades;
 
-  private final Set<String> generalCurriculumSemesters;
+  private Set<String> generalCurriculumSemesters;
 
-  private final Set<String> generalCurriculumSubjects;
+  private Set<String> generalCurriculumSubjects;
 
-  private final Map<String, Map<String, Integer>> nonCurriculumGrades;
+  private Map<String, Map<String, Integer>> nonCurriculumGrades;
 
-  private final Map<String, Map<String, ArtSportScore>> artSportGrades;
+  private Map<String, Map<String, ArtSportScore>> artSportGrades;
 
   public MiddleSchoolTranscript(
       @NotNull Map<String, Map<String, CurricularScore>> generalCurriculumGrades,

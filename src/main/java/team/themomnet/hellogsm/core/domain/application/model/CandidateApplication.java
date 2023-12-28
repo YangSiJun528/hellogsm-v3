@@ -17,13 +17,13 @@ public final class CandidateApplication extends AbstractApplication {
 
   public static final class CandidatePersonalInformation extends AbstractPersonalInformation {
 
-    private final String schoolName;
+    private String schoolName;
 
-    private final String schoolLocation;
+    private String schoolLocation;
 
-    private final String teacherName;
+    private String teacherName;
 
-    private final String teacherPhoneNumber;
+    private String teacherPhoneNumber;
 
     CandidatePersonalInformation(
         @NonNull AbstractPersonalInformationParameter superParameter,
@@ -44,33 +44,33 @@ public final class CandidateApplication extends AbstractApplication {
     // 근데 이거 자율학기제/학년제 때문에 다른 상태를 가질수도 있음
     // 리스트나 그련 형태를 가지는게 좋을거 같음
 
-    private final MiddleSchoolTranscript transcript;// 중학교 성적증명서
+    private MiddleSchoolTranscript transcript;// 중학교 성적증명서
 
-    private final BigDecimal grade1Semester1Score; // 1 grade(학년) 1 semester(학기) 점수
+    private BigDecimal grade1Semester1Score; // 1 grade(학년) 1 semester(학기) 점수
 
-    private final BigDecimal grade1Semester2Score;
+    private BigDecimal grade1Semester2Score;
 
-    private final BigDecimal grade2Semester1Score;
+    private BigDecimal grade2Semester1Score;
 
-    private final BigDecimal grade2Semester2Score;
+    private BigDecimal grade2Semester2Score;
 
-    private final BigDecimal grade3Semester1Score;
+    private BigDecimal grade3Semester1Score;
 
-    private final BigDecimal artisticScore; // 예체능 점수
+    private BigDecimal artisticScore; // 예체능 점수
 
     // 이거 굳이 필드로 저장할 필요 있나? 메서드로 만들어도 될거 같은데,
     // -> 오브젝트 매퍼가 프로퍼티(필드 + get/setter)를 참고해서 변수로 선언해줘야 함 - https://sedangdang.tistory.com/307
     // -> 대신 외부에서 입력받지 않고, 직접 계산해서 넣거나 할 수 있음
     // -> 근데 그런걸 외부 계산 객체에서 할꺼라 냅두는게 나을듯
-    private final BigDecimal curricularSubtotalScore; // 교과 성적 소계
+    private BigDecimal curricularSubtotalScore; // 교과 성적 소계
 
-    private final BigDecimal attendanceScore; // 출석 점수
+    private BigDecimal attendanceScore; // 출석 점수
 
-    private final BigDecimal volunteerScore; // 봉사 점수
+    private BigDecimal volunteerScore; // 봉사 점수
 
-    private final BigDecimal extraCurricularSubtotalScore; // 비교과 성적 소계
+    private BigDecimal extraCurricularSubtotalScore; // 비교과 성적 소계
 
-    private final BigDecimal totalScore; // 합계 - 환산총점
+    private BigDecimal totalScore; // 합계 - 환산총점
 
 
     private CandidateMiddleSchoolGrade(@NonNull CandidateMiddleSchoolGradeParameter parameter) {

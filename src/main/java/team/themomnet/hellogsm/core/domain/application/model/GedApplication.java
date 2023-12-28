@@ -22,9 +22,9 @@ public final class GedApplication extends AbstractApplication {
 
   public static final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-    private final BigDecimal gedTotalScore; // GED 시험 총점
+    private BigDecimal gedTotalScore; // GED 시험 총점
 
-    private final BigDecimal gedMaxScore; // GED 시험 만점 - 과목수 * 100
+    private BigDecimal gedMaxScore; // GED 시험 만점 - 과목수 * 100
 
     public GedMiddleSchoolGrade(
         @NonNull BigDecimal percentileRank,

@@ -12,6 +12,6 @@ import team.themomnet.hellogsm.core.domain.application.model.GraduateApplication
 public abstract sealed class AbstractMiddleSchoolGrade permits CandidateMiddleSchoolGrade,
     GraduateMiddleSchoolGrade, GedMiddleSchoolGrade {
 
-  private final BigDecimal percentileRank;
+  private BigDecimal percentileRank;
 
 }

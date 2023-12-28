@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MiddleSchoolTranscriptTest {
@@ -26,6 +27,7 @@ class MiddleSchoolTranscriptTest {
   private static final Set<String> semesters = semesterType.getSemesters();
 
   private static final Set<String> subjects = new HashSet<>();
+
   static {
     subjects.addAll(Set.of("중국어", "프로그래밍"));
     subjects.addAll(MiddleSchoolTranscript.CURRICULUM_DEFAULT_SUBJECTS);
@@ -114,4 +116,58 @@ class MiddleSchoolTranscriptTest {
     System.out.println(json);
     assertNotNull(json);
   }
+
+  @Test
+  public void createWithoutDefaultSubject() {
+    // given
+    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
+    inValidSubjects.remove("국어");
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(inValidSubjects),
+            semesterType,
+            subjects,
+            artSportGradesGrades(),
+            nonCurricularGradesGrades()
+        ));
+    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
+  }
+
+//  @Test
+//  public void tyrInValidCreate() {
+//    // given
+//    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
+//    inValidSubjects.remove("국어");
+//
+//    // when & then
+//    Throwable exception = assertThrows(IllegalArgumentException.class,
+//        () -> new MiddleSchoolTranscript(
+//            createCurricularGrades(inValidSubjects),
+//            semesterType,
+//            subjects,
+//            artSportGradesGrades(),
+//            nonCurricularGradesGrades()
+//        ));
+//    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
+//  }
+//
+//  @Test
+//  public void tyrInValidCreate() {
+//    // given
+//    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
+//    inValidSubjects.remove("국어");
+//
+//    // when & then
+//    Throwable exception = assertThrows(IllegalArgumentException.class,
+//        () -> new MiddleSchoolTranscript(
+//            createCurricularGrades(inValidSubjects),
+//            semesterType,
+//            subjects,
+//            artSportGradesGrades(),
+//            nonCurricularGradesGrades()
+//        ));
+//    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
+//  }
 }

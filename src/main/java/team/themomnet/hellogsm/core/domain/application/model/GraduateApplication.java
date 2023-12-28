@@ -14,13 +14,13 @@ public final class GraduateApplication extends AbstractApplication {
 
   public static final class GraduatePersonalInformation extends AbstractPersonalInformation {
 
-    private final String schoolName;
+    private String schoolName;
 
-    private final String schoolLocation;
+    private String schoolLocation;
 
-    private final String teacherName;
+    private String teacherName;
 
-    private final String teacherPhoneNumber;
+    private String teacherPhoneNumber;
 
     GraduatePersonalInformation(
         @NonNull AbstractPersonalInformationParameter superParameter,
@@ -38,9 +38,9 @@ public final class GraduateApplication extends AbstractApplication {
 
   public static final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-    private final BigDecimal attendanceScore; // 출석 점수
+    private BigDecimal attendanceScore; // 출석 점수
 
-    private final BigDecimal volunteerScore; // 봉사 점수
+    private BigDecimal volunteerScore; // 봉사 점수
 
     public GraduateMiddleSchoolGrade(
         @NonNull BigDecimal percentileRank,

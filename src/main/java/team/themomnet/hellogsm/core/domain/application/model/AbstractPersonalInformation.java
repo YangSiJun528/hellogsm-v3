@@ -12,27 +12,27 @@ public abstract sealed class AbstractPersonalInformation
     GraduateApplication.GraduatePersonalInformation,
     GedApplication.GedPersonalInformation {
 
-  protected final String applicantImageUri;
+  protected String applicantImageUri;
 
-  protected final String applicantName;
+  protected String applicantName;
 
-  protected final Gender applicantGender;
+  protected Gender applicantGender;
 
-  protected final LocalDate applicantBirth;
+  protected LocalDate applicantBirth;
 
-  protected final String address;
+  protected String address;
 
-  protected final String detailAddress;
+  protected String detailAddress;
 
-  protected final GraduationStatus graduation;
+  protected GraduationStatus graduation;
 
-  protected final String telephone;
+  protected String telephone;
 
-  protected final String applicantPhoneNumber;
+  protected String applicantPhoneNumber;
 
-  protected final String guardianName;
+  protected String guardianName;
 
-  protected final String relationWithApplicant;
+  protected String relationWithApplicant;
 
   protected AbstractPersonalInformation(@NonNull AbstractPersonalInformationParameter parameter) {
     this.applicantImageUri = parameter.getApplicantImageUri();

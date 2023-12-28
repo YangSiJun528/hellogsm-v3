@@ -28,7 +28,7 @@ public abstract sealed class AbstractApplication permits CandidateApplication, G
   protected final Evaluation subjectEvaluation; // 1차 평가 - (가명: 학문 평가) - 평가 이전엔 null
 
   @Nullable
-  protected final Evaluation competencyEvaluation; // 1차 평가 - (가명: 역량 평가) - 평가 이전엔 null
+  protected final Evaluation competencyEvaluation; // 2차 평가 - (가명: 역량 평가) - 평가 이전엔 null
 
   @Nullable
   protected final Long registrationNumber;  // 접수 번호, 원서 제출 기간 후 배정됨 - 이전에는 null

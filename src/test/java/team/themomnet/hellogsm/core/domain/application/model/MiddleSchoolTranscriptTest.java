@@ -1,129 +1,117 @@
 package team.themomnet.hellogsm.core.domain.application.model;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import org.junit.jupiter.api.function.Executable;
+import team.themomnet.hellogsm.core.domain.type.ArtSportScore;
+import team.themomnet.hellogsm.core.domain.type.CurricularScore;
 import team.themomnet.hellogsm.core.domain.type.SemesterType;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MiddleSchoolTranscriptTest {
+class MiddleSchoolTranscriptTest {
 
-  private MiddleSchoolTranscript middleSchoolTranscript;
+  private MiddleSchoolTranscript validTranscript;
+
+  private static final SemesterType semesterType = SemesterType.GRADE_1_1_FREE_SEMESTER;
+  private static final Set<String> semesters = semesterType.getSemesters();
+
+  private static final Set<String> subjects = new HashSet<>();
+  static {
+    subjects.addAll(Set.of("중국어", "프로그래밍"));
+    subjects.addAll(MiddleSchoolTranscript.CURRICULUM_DEFAULT_SUBJECTS);
+  }
 
   @BeforeEach
   public void setUp() {
-    List<String> subjects = new ArrayList<>(List.of("중국어", "프로그래밍"));
-    subjects.addAll(MiddleSchoolTranscript.DEFAULT_SUBJECTS);
-    middleSchoolTranscript = new MiddleSchoolTranscript(createGrades(subjects), SemesterType.NO_FREE_SEMESTER, subjects);
+    // 예체능, 비교과 점수 생성
+    validTranscript = new MiddleSchoolTranscript(
+        createCurricularGrades(subjects),
+        semesterType,
+        subjects,
+        artSportGradesGrades(),
+        nonCurricularGradesGrades()
+    );
   }
 
-  private Map<String, Map<String, Integer>> createGrades(List<String> subjects) {
-    Map<String, Map<String, Integer>> grades = new HashMap<>();
-    List<String> semesters = SemesterType.NO_FREE_SEMESTER.getSemesters();
+  private Map<String, Map<String, CurricularScore>> createCurricularGrades(Set<String> subjects) {
+    Map<String, Map<String, CurricularScore>> curricularGrades = new HashMap<>();
+    Set<String> semesters = MiddleSchoolTranscriptTest.semesters;
 
     for (String subject : subjects) {
-      Map<String, Integer> subjectGrades = new HashMap<>();
+      Map<String, CurricularScore> subjectGrades = new HashMap<>();
       for (String semester : semesters) {
-        subjectGrades.put(semester, (int) (Math.random() * 100) + 1);
+        subjectGrades.put(semester, randomCurricularScore());
       }
-      grades.put(subject, subjectGrades);
+      curricularGrades.put(subject, subjectGrades);
     }
 
-    return grades;
+    return curricularGrades;
   }
 
-  @Test
-  public void testGetGradesForSubject() {
-    String subject = "국어";
-    Map<String, Integer> gradesForSubject = middleSchoolTranscript.getGradesForSubject(subject);
+  private Map<String, Map<String, ArtSportScore>> artSportGradesGrades() {
+    Map<String, Map<String, ArtSportScore>> artSportGrades = new HashMap<>();
+    Set<String> semesters = MiddleSchoolTranscript.ART_SPORT_KEY_SET;
 
-    assertTrue(gradesForSubject.keySet().containsAll(middleSchoolTranscript.getSemesters()));
-    assertTrue(gradesForSubject.values().stream().allMatch(grade -> grade >= 1 && grade <= 100));
+    for (String subject : MiddleSchoolTranscript.ART_SPORT_SUBJECTS) {
+      Map<String, ArtSportScore> subjectGrades = new HashMap<>();
+      for (String semester : semesters) {
+        subjectGrades.put(semester, randomArtSportScore());
+      }
+      artSportGrades.put(subject, subjectGrades);
+    }
+
+    return artSportGrades;
   }
 
-  @Test
-  public void testGetGradeForSubjectInSemester() {
-    String subject = "수학";
-    Integer grade = middleSchoolTranscript.getGradeForSubjectInSemester(subject, SemesterType.GRADE_2_2);
+  private Map<String, Map<String, Integer>> nonCurricularGradesGrades() {
+    Map<String, Map<String, Integer>> nonCurricularGrades = new HashMap<>();
+    Set<String> semesters = MiddleSchoolTranscript.SCHOOL_YEAR;
 
-    assertNotNull(grade);
-    assertTrue(grade >= 1 && grade <= 100);
+    for (String subject : MiddleSchoolTranscript.NON_CURRICULUM_SUBJECTS) {
+      Map<String, Integer> subjectGrades = new HashMap<>();
+      for (String semester : semesters) {
+        subjectGrades.put(semester, randomNonCurricularScore());
+      }
+      nonCurricularGrades.put(subject, subjectGrades);
+    }
+
+    return nonCurricularGrades;
   }
 
-  @Test
-  public void testGetSemesters() {
-    List<String> semesters = middleSchoolTranscript.getSemesters();
-    assertEquals(SemesterType.NO_FREE_SEMESTER.getSemesters(), semesters);
+  public CurricularScore randomCurricularScore() {
+    List<CurricularScore> curricularScores = Arrays.asList(CurricularScore.values());
+    Random rand = new Random();
+    CurricularScore randomElement = curricularScores.get(rand.nextInt(curricularScores.size()));
+    return randomElement;
   }
 
-  @Test
-  public void testGetSubjects() {
-    List<String> subjects = middleSchoolTranscript.getSubjects();
-    assertTrue(subjects.containsAll(MiddleSchoolTranscript.DEFAULT_SUBJECTS));
+  public ArtSportScore randomArtSportScore() {
+    List<ArtSportScore> artSportScores = Arrays.asList(ArtSportScore.values());
+    Random rand = new Random();
+    ArtSportScore randomElement = artSportScores.get(rand.nextInt(artSportScores.size()));
+    return randomElement;
   }
 
-  @Test
-  public void testInvalidSubject() {
-    String subjectNotInGrade = "음악";
-    assertThrows(IllegalArgumentException.class, () -> {
-      middleSchoolTranscript.getGradeForSubjectInSemester(subjectNotInGrade, SemesterType.GRADE_1_1);
-    });
+  public int randomNonCurricularScore() {
+    Random rand = new Random();
+    return rand.nextInt(10); //0 <= int < N
   }
 
   @Test
   public void testObjectToJson() throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
-    String json = objectMapper.writeValueAsString(middleSchoolTranscript);
+    String json = objectMapper.writeValueAsString(validTranscript);
     System.out.println(json);
     assertNotNull(json);
   }
-
-  @Test
-  void invalidMiddleSchoolTranscriptMissingDefaultSubjects() {
-    // Arrange
-    Map<String, Map<String, Integer>> grades = new HashMap<>();
-    List<String> subjects = List.of("국어", "수학", "영어");
-    List<String> semesters = List.of("1-1", "1-2", "2-1");
-
-    for (String subject : subjects) {
-      Map<String, Integer> subjectGrades = new HashMap<>();
-      for (String semester : semesters) {
-        subjectGrades.put(semester, 80); // Sample grade (80)
-      }
-      grades.put(subject, subjectGrades);
-    }
-
-    // Act & Assert
-    Executable executable = () -> new MiddleSchoolTranscript(grades,
-        SemesterType.FREE_GRADE, subjects);
-    assertThrows(IllegalArgumentException.class, executable,
-        "All DEFAULT_SUBJECTS must be included in provided subjects.");
-  }
-
-  @Test
-  void invalidMiddleSchoolTranscriptMissingGrades() {
-    // Arrange
-    Map<String, Map<String, Integer>> grades = new HashMap<>();
-    List<String> subjects = List.of("국어", "수학", "영어", "과학");
-    List<String> semesters = List.of("1-1", "1-2", "2-1");
-
-    // Missing grades for the subject "과학"
-    grades.put("국어", Map.of("1-1", 80, "1-2", 85, "2-1", 90));
-    grades.put("수학", Map.of("1-1", 75, "1-2", 88, "2-1", 92));
-    grades.put("영어", Map.of("1-1", 95, "1-2", 80, "2-1", 87));
-
-    // Act & Assert
-    Executable executable = () -> new MiddleSchoolTranscript(grades,
-        SemesterType.FREE_GRADE, subjects);
-    assertThrows(IllegalArgumentException.class, executable,
-        "Subject 과학 is missing grades for some semesters.");
-  }
-
 }

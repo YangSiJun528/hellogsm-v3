@@ -27,7 +27,7 @@ class MiddleSchoolTranscriptTest {
   private static final SemesterType semesterType = SemesterType.GRADE_1_1_FREE_SEMESTER;
   private static final List<String> semesters = semesterType.getSemesters();
 
-  private static final List<String> subjects = new HashSet<>();
+  private static final List<String> subjects = new ArrayList<>();
 
   static {
     subjects.addAll(List.of("중국어", "프로그래밍"));
@@ -133,42 +133,19 @@ class MiddleSchoolTranscriptTest {
             artSportGradesGrades(),
             nonCurricularGradesGrades()
         ));
-    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
+    assertThat(exception.getMessage()).contains("generalCurriculumSubjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
   }
 
-//  @Test
-//  public void tyrInValidCreate() {
-//    // given
-//    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
-//    inValidSubjects.remove("국어");
-//
-//    // when & then
-//    Throwable exception = assertThrows(IllegalArgumentException.class,
-//        () -> new MiddleSchoolTranscript(
-//            createCurricularGrades(inValidSubjects),
-//            semesterType,
-//            subjects,
-//            artSportGradesGrades(),
-//            nonCurricularGradesGrades()
-//        ));
-//    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
-//  }
-//
-//  @Test
-//  public void tyrInValidCreate() {
-//    // given
-//    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
-//    inValidSubjects.remove("국어");
-//
-//    // when & then
-//    Throwable exception = assertThrows(IllegalArgumentException.class,
-//        () -> new MiddleSchoolTranscript(
-//            createCurricularGrades(inValidSubjects),
-//            semesterType,
-//            subjects,
-//            artSportGradesGrades(),
-//            nonCurricularGradesGrades()
-//        ));
-//    assertThat(exception.getMessage()).contains("subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
-//  }
+  // NonCurriculumGrades
+  // 1. 필요 과목과 nonCurriculumGrades의 과목의 불일치
+  // 2. 필요 학기와 nonCurriculumGrades의 모든 과목의 학기 중 일부 사이에서 불일치
+
+  // CurriculumGrades
+  // 1. 기본 과목 누락
+  // 2. generalCurriculumSubjects와 generalCurriculumGrades.keySet()의 불일치 - 완료
+  // 3. generalCurriculumGrades의 모든 과목의 학기 중 일부와 SemesterType의 학기와 일치하지 않음
+
+  // ArtSportGrades
+  // 1. 필요 과목과 artSportGrades의 과목의 불일치
+  // 2. 필요 학기와 artSportGrades의 모든 과목의 학기 중 일부 사이에서 불일치
 }

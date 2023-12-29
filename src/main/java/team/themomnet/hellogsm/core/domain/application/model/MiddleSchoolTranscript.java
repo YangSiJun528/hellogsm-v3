@@ -92,7 +92,7 @@ public class MiddleSchoolTranscript {
         throw new IllegalArgumentException(
             subject + " 과목을 가지고 있지 않습니다. 다음과 같은 과목이 필요: " + NON_CURRICULUM_SUBJECTS);
       }
-      if (!nonCurriculumGrades.get(subject).keySet().equals(SCHOOL_YEAR)) {
+      if (!nonCurriculumGrades.get(subject).keySet().equals(Set.copyOf(SCHOOL_YEAR))) {
         throw new IllegalArgumentException(
             subject + " 과목이 필요한 모든 학기를 가지고 있지 않습니다. 현재 " + subject + "의 학기: "
                 + nonCurriculumGrades.get(subject).keySet() + ". 필요한 학기: " + SCHOOL_YEAR);
@@ -107,16 +107,18 @@ public class MiddleSchoolTranscript {
   ) {
     // assert generalCurriculumGrades.keySet().equals(subjects); assert를 쓰는 기준을 잘 모르곘음
 
+    Set<String> setSubject = Set.copyOf(subjects);
+
     // subjects와 generalCurriculumGrades가 서로 일치하는가?
-    if (!generalCurriculumGrades.keySet().equals(subjects)) {
+    if (!generalCurriculumGrades.keySet().equals(setSubject)) {
       throw new IllegalArgumentException(
-          "subjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다." +
-              "subjects: " + subjects + "." +
+          "generalCurriculumSubjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다." +
+              "generalCurriculumSubjects: " + subjects + "." +
               "generalCurriculumGrades.keySet(): " + generalCurriculumGrades.keySet());
     }
 
     // subjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하는가?
-    if (!subjects.containsAll(CURRICULUM_DEFAULT_SUBJECTS)) {
+    if (!setSubject.containsAll(CURRICULUM_DEFAULT_SUBJECTS)) {
       throw new IllegalArgumentException(
           "subjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하지 않습니다." +
               "CURRICULUM_DEFAULT_SUBJECTS는 다음과 같다: " + CURRICULUM_DEFAULT_SUBJECTS + ". " +
@@ -131,7 +133,7 @@ public class MiddleSchoolTranscript {
       // 예를 들어,
       //   1학년 1학기 자유학기제라면, 1-1을 제외한 1-2~3-1 학기를 가져야 한다.
       //   따라서 모든 과목이 1-2~3-1를 가지는지 확인해야 한다.
-      if (!scores.keySet().equals(semesterType.getSemesters())) {
+      if (!scores.keySet().equals(Set.copyOf(semesterType.getSemesters()))) {
         throw new IllegalArgumentException(
             "과목 " + subject + "의 학기가 SemesterType의 학기 정보와 일치하지 않습니다.");
       }
@@ -144,7 +146,7 @@ public class MiddleSchoolTranscript {
         throw new IllegalArgumentException(
             subject + " 과목을 가지고 있지 않습니다. 다음과 같은 과목이 필요: " + ART_SPORT_SUBJECTS);
       }
-      if (!artSportGrades.get(subject).keySet().equals(ART_SPORT_KEY_SET)) {
+      if (!artSportGrades.get(subject).keySet().equals(Set.copyOf(ART_SPORT_KEY_SET))) {
         throw new IllegalArgumentException(
             subject + " 과목이 필요한 모든 학기를 가지고 있지 않습니다. 현재 " + subject + "의 학기: "
                 + artSportGrades.get(subject).keySet() + ". 필요한 학기: " + ART_SPORT_KEY_SET);

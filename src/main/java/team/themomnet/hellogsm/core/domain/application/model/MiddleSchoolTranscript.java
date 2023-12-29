@@ -1,9 +1,11 @@
 package team.themomnet.hellogsm.core.domain.application.model;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -41,46 +43,47 @@ import team.themomnet.hellogsm.core.domain.type.SemesterType;
  */
 public class MiddleSchoolTranscript {
 
-  public static Set<String> CURRICULUM_DEFAULT_SUBJECTS = Set.of("국어", "도덕", "사회", "역사",
+  public static final List<String> CURRICULUM_DEFAULT_SUBJECTS = List.of("국어", "도덕", "사회", "역사",
       "수학", "과학", "기술가정", "정보", "영어");
-  public static Set<String> ART_SPORT_SUBJECTS = Set.of("체육", "음악", "미술");
-  public static Set<String> NON_CURRICULUM_SUBJECTS = Set.of("결석", "지각", "조퇴", "결과",
+  public static final List<String> ART_SPORT_SUBJECTS = List.of("체육", "음악", "미술");
+  public static final List<String> NON_CURRICULUM_SUBJECTS = List.of("결석", "지각", "조퇴", "결과",
       "봉사활동(시간)");
-  public static Set<String> ART_SPORT_KEY_SET = new HashSet<>(
-      Set.of(SemesterType.GRADE_2_1, SemesterType.GRADE_2_2, SemesterType.GRADE_3_1));
-  public static Set<String> SCHOOL_YEAR = new HashSet<>(
-      Set.of("1", "2", "3"));
+  public static final List<String> ART_SPORT_KEY_SET = new ArrayList<>(
+      List.of(SemesterType.GRADE_2_1, SemesterType.GRADE_2_2, SemesterType.GRADE_3_1));
+  public static final List<String> SCHOOL_YEAR = new ArrayList<>(
+      List.of("1", "2", "3"));
 
-  private Map<String, Map<String, CurricularScore>> generalCurriculumGrades;
+  private final Map<String, Map<String, CurricularScore>> generalCurriculumGrades;
 
-  private Set<String> generalCurriculumSemesters;
+  private final List<String> generalCurriculumSemesters;
 
-  private Set<String> generalCurriculumSubjects;
+  private final List<String> generalCurriculumSubjects;
 
-  private Map<String, Map<String, Integer>> nonCurriculumGrades;
+  private final Map<String, Map<String, Integer>> nonCurriculumGrades;
 
-  private Map<String, Map<String, ArtSportScore>> artSportGrades;
+  private final Map<String, Map<String, ArtSportScore>> artSportGrades;
 
   public MiddleSchoolTranscript(
       @NotNull Map<String, Map<String, CurricularScore>> generalCurriculumGrades,
-      @NotNull SemesterType generalCurriculumSemesterType, // 정확히는 generalCurriculumSemesterType
-      @NotNull Set<String> generalCurriculumSubjects,  // 정확히는 generalCurriculumSubjects
+      @NotNull SemesterType generalCurriculumSemesterType,
+      @NotNull List<String> generalCurriculumSubjects,
       @NotNull Map<String, Map<String, ArtSportScore>> artSportGrades,
       @NotNull Map<String, Map<String, Integer>> nonCurriculumGrades
   ) {
-    this.generalCurriculumSubjects = generalCurriculumSubjects;
+    // new로 선언하는 이유는 선언 시 사용한 외부의 generalCurriculumGrades를 수정하면 객체 내부의 값이 변경될 수 있기 때문
+    this.generalCurriculumSubjects = new ArrayList<>(generalCurriculumSubjects);
+    // generalCurriculumSemesterType는 Enum에서 unmodifiable 한 상태로 가져와서 new 안써도 됨
     this.generalCurriculumSemesters = generalCurriculumSemesterType.getSemesters();
 
     validCurriculumGrades(generalCurriculumGrades, generalCurriculumSemesterType,
         generalCurriculumSubjects);
-    // new로 선언하는 이유는 선언 시 사용한 외부의 grades를 수정하면 객체 내부의 값이 변경될 수 있기 때문
     this.generalCurriculumGrades = new HashMap<>(generalCurriculumGrades);
 
     validArtSportGrades(artSportGrades);
     this.artSportGrades = new HashMap<>(artSportGrades);
 
     validNonCurriculumGrades(nonCurriculumGrades);
-    this.nonCurriculumGrades = nonCurriculumGrades;
+    this.nonCurriculumGrades = new HashMap<>(nonCurriculumGrades);
   }
 
   private void validNonCurriculumGrades(Map<String, Map<String, Integer>> nonCurriculumGrades) {
@@ -100,7 +103,7 @@ public class MiddleSchoolTranscript {
   private void validCurriculumGrades(
       Map<String, Map<String, CurricularScore>> generalCurriculumGrades,
       SemesterType semesterType,
-      Set<String> subjects
+      List<String> subjects
   ) {
     // assert generalCurriculumGrades.keySet().equals(subjects); assert를 쓰는 기준을 잘 모르곘음
 
@@ -120,10 +123,9 @@ public class MiddleSchoolTranscript {
               "현재 subjects: " + subjects + ".");
     }
 
-    //TODO aaaaa 이름 바꾸기
-    for (Entry<String, Map<String, CurricularScore>> aaaaa : generalCurriculumGrades.entrySet()) {
-      String subject = aaaaa.getKey();
-      Map<String, CurricularScore> scores = aaaaa.getValue();
+    for (Entry<String, Map<String, CurricularScore>> entry : generalCurriculumGrades.entrySet()) {
+      String subject = entry.getKey();
+      Map<String, CurricularScore> scores = entry.getValue();
 
       // 모든 과목의 학기가 유효한지 확인
       // 예를 들어,
@@ -163,16 +165,16 @@ public class MiddleSchoolTranscript {
     return generalCurriculumGrades.get(subject).get(semester);
   }
 
-  public Set<String> getGeneralCurriculumSemesters() {
-    return Collections.unmodifiableSet(generalCurriculumSemesters);
+  public List<String> getGeneralCurriculumSemesters() {
+    return Collections.unmodifiableList(generalCurriculumSemesters);
   }
 
   public Map<String, Map<String, CurricularScore>> getGeneralCurriculumGrades() {
     return Collections.unmodifiableMap(generalCurriculumGrades);
   }
 
-  public Set<String> getGeneralCurriculumSubjects() {
-    return Collections.unmodifiableSet(generalCurriculumSubjects);
+  public List<String> getGeneralCurriculumSubjects() {
+    return Collections.unmodifiableList(generalCurriculumSubjects);
   }
 
   public Map<String, Map<String, ArtSportScore>> getArtSportGrades() {

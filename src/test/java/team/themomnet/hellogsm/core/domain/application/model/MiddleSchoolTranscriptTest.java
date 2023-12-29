@@ -2,6 +2,7 @@ package team.themomnet.hellogsm.core.domain.application.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -24,12 +25,12 @@ class MiddleSchoolTranscriptTest {
   private MiddleSchoolTranscript validTranscript;
 
   private static final SemesterType semesterType = SemesterType.GRADE_1_1_FREE_SEMESTER;
-  private static final Set<String> semesters = semesterType.getSemesters();
+  private static final List<String> semesters = semesterType.getSemesters();
 
-  private static final Set<String> subjects = new HashSet<>();
+  private static final List<String> subjects = new HashSet<>();
 
   static {
-    subjects.addAll(Set.of("중국어", "프로그래밍"));
+    subjects.addAll(List.of("중국어", "프로그래밍"));
     subjects.addAll(MiddleSchoolTranscript.CURRICULUM_DEFAULT_SUBJECTS);
   }
 
@@ -45,9 +46,9 @@ class MiddleSchoolTranscriptTest {
     );
   }
 
-  private Map<String, Map<String, CurricularScore>> createCurricularGrades(Set<String> subjects) {
+  private Map<String, Map<String, CurricularScore>> createCurricularGrades(List<String> subjects) {
     Map<String, Map<String, CurricularScore>> curricularGrades = new HashMap<>();
-    Set<String> semesters = MiddleSchoolTranscriptTest.semesters;
+    List<String> semesters = MiddleSchoolTranscriptTest.semesters;
 
     for (String subject : subjects) {
       Map<String, CurricularScore> subjectGrades = new HashMap<>();
@@ -62,7 +63,7 @@ class MiddleSchoolTranscriptTest {
 
   private Map<String, Map<String, ArtSportScore>> artSportGradesGrades() {
     Map<String, Map<String, ArtSportScore>> artSportGrades = new HashMap<>();
-    Set<String> semesters = MiddleSchoolTranscript.ART_SPORT_KEY_SET;
+    List<String> semesters = MiddleSchoolTranscript.ART_SPORT_KEY_SET;
 
     for (String subject : MiddleSchoolTranscript.ART_SPORT_SUBJECTS) {
       Map<String, ArtSportScore> subjectGrades = new HashMap<>();
@@ -77,7 +78,7 @@ class MiddleSchoolTranscriptTest {
 
   private Map<String, Map<String, Integer>> nonCurricularGradesGrades() {
     Map<String, Map<String, Integer>> nonCurricularGrades = new HashMap<>();
-    Set<String> semesters = MiddleSchoolTranscript.SCHOOL_YEAR;
+    List<String> semesters = MiddleSchoolTranscript.SCHOOL_YEAR;
 
     for (String subject : MiddleSchoolTranscript.NON_CURRICULUM_SUBJECTS) {
       Map<String, Integer> subjectGrades = new HashMap<>();
@@ -120,7 +121,7 @@ class MiddleSchoolTranscriptTest {
   @Test
   public void createWithoutDefaultSubject() {
     // given
-    Set<String> inValidSubjects = new HashSet<>(MiddleSchoolTranscriptTest.subjects);
+    List<String> inValidSubjects = new ArrayList<>(MiddleSchoolTranscriptTest.subjects);
     inValidSubjects.remove("국어");
 
     // when & then

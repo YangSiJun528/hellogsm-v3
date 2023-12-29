@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,6 @@ import team.themomnet.hellogsm.core.domain.type.SemesterType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,10 +117,10 @@ class MiddleSchoolTranscriptTest {
   }
 
   @Test
-  public void createWithoutDefaultSubject() {
+  public void createInconsistencyBetweenGeneralCurriculumGradesAndGeneralCurriculumSubjects() {
     // given
     List<String> inValidSubjects = new ArrayList<>(MiddleSchoolTranscriptTest.subjects);
-    inValidSubjects.remove("국어");
+    inValidSubjects.add("국제외교");
 
     // when & then
     Throwable exception = assertThrows(IllegalArgumentException.class,
@@ -136,16 +134,113 @@ class MiddleSchoolTranscriptTest {
     assertThat(exception.getMessage()).contains("generalCurriculumSubjects와 generalCurriculumGrades의 keySet이 일치하지 않습니다.");
   }
 
-  // NonCurriculumGrades
-  // 1. 필요 과목과 nonCurriculumGrades의 과목의 불일치
-  // 2. 필요 학기와 nonCurriculumGrades의 모든 과목의 학기 중 일부 사이에서 불일치
+  @Test
+  public void createWithoutDefaultSubject() {
+    // given
+    List<String> inValidSubjects = new ArrayList<>(MiddleSchoolTranscriptTest.subjects);
+    inValidSubjects.remove("국어");
 
-  // CurriculumGrades
-  // 1. 기본 과목 누락
-  // 2. generalCurriculumSubjects와 generalCurriculumGrades.keySet()의 불일치 - 완료
-  // 3. generalCurriculumGrades의 모든 과목의 학기 중 일부와 SemesterType의 학기와 일치하지 않음
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(inValidSubjects),
+            semesterType,
+            inValidSubjects,
+            artSportGradesGrades(),
+            nonCurricularGradesGrades()
+        ));
+    assertThat(exception.getMessage()).contains("generalCurriculumSubjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하지 않습니다.");
+  }
 
-  // ArtSportGrades
-  // 1. 필요 과목과 artSportGrades의 과목의 불일치
-  // 2. 필요 학기와 artSportGrades의 모든 과목의 학기 중 일부 사이에서 불일치
+  @Test
+  public void generalCurriculumGrades의_모든_과목의_학기_중_일부와_SemesterType의_학기와_일치하지_않음() {
+    // given
+    Map<String, Map<String, CurricularScore>> validGrades = createCurricularGrades(subjects);
+    validGrades.get("국어").remove(SemesterType.GRADE_2_1);
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            validGrades,
+            semesterType,
+            subjects,
+            artSportGradesGrades(),
+            nonCurricularGradesGrades()
+        ));
+    assertThat(exception.getMessage()).contains("과목 국어의 학기가 SemesterType의 학기 정보와 일치하지 않습니다.");
+  }
+
+  @Test
+  public void 필요_과목과_artSportGrades의_과목의_불일치() {
+    // given
+    var inValidArtSportGradesGrades = artSportGradesGrades();
+    inValidArtSportGradesGrades.remove("체육");
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(subjects),
+            semesterType,
+            subjects,
+            inValidArtSportGradesGrades,
+            nonCurricularGradesGrades()
+        ));
+    assertThat(exception.getMessage()).contains("체육 과목을 가지고 있지 않습니다. 다음과 같은 과목이 필요: [체육, 음악, 미술]");
+  }
+
+  @Test
+  public void 필요_학기와_artSportGrades의_모든_과목의_학기_중_일부_사이에서_불일치() {
+    // given
+    var inValidArtSportGradesGrades = artSportGradesGrades();
+    inValidArtSportGradesGrades.get("체육").remove(SemesterType.GRADE_2_1);
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(subjects),
+            semesterType,
+            subjects,
+            inValidArtSportGradesGrades,
+            nonCurricularGradesGrades()
+        ));
+    assertThat(exception.getMessage()).contains("체육 과목이 필요한 모든 학기를 가지고 있지 않습니다. 현재 체육의 학기: [2-2, 3-1]. 필요한 학기: [2-1, 2-2, 3-1]");
+  }
+
+  @Test
+  public void 필요_과목과_nonCurriculumGrades의_과목의_불일치() {
+    // given
+    var inValidNonCurricularGradesGrades = nonCurricularGradesGrades();
+    // MiddleSchoolTranscript.SCHOOL_YEAR.get(0) == 1
+    inValidNonCurricularGradesGrades.remove("지각");
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(subjects),
+            semesterType,
+            subjects,
+            artSportGradesGrades(),
+            inValidNonCurricularGradesGrades
+        ));
+    assertThat(exception.getMessage()).contains( "지각 과목을 가지고 있지 않습니다. 다음과 같은 과목이 필요: [결석, 지각, 조퇴, 결과, 봉사활동(시간)]");
+  }
+
+  @Test
+  public void 필요_학기와_nonCurriculumGrades의_모든_과목의_학기_중_일부_사이에서_불일치() {
+    // given
+    var inValidNonCurricularGradesGrades = nonCurricularGradesGrades();
+    // MiddleSchoolTranscript.SCHOOL_YEAR.get(0) == 1
+    inValidNonCurricularGradesGrades.get("지각").remove(MiddleSchoolTranscript.SCHOOL_YEAR.get(0));
+
+    // when & then
+    Throwable exception = assertThrows(IllegalArgumentException.class,
+        () -> new MiddleSchoolTranscript(
+            createCurricularGrades(subjects),
+            semesterType,
+            subjects,
+            artSportGradesGrades(),
+            inValidNonCurricularGradesGrades
+        ));
+    assertThat(exception.getMessage()).contains("지각 과목이 필요한 모든 학기를 가지고 있지 않습니다. 현재 지각의 학기: [2, 3]. 필요한 학기: [1, 2, 3]");
+  }
 }

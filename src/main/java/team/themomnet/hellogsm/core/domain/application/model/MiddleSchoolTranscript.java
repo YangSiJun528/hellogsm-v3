@@ -120,7 +120,7 @@ public class MiddleSchoolTranscript {
     // subjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하는가?
     if (!setSubject.containsAll(CURRICULUM_DEFAULT_SUBJECTS)) {
       throw new IllegalArgumentException(
-          "subjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하지 않습니다." +
+          "generalCurriculumSubjects가 CURRICULUM_DEFAULT_SUBJECTS를 전부 포함하지 않습니다." +
               "CURRICULUM_DEFAULT_SUBJECTS는 다음과 같다: " + CURRICULUM_DEFAULT_SUBJECTS + ". " +
               "현재 subjects: " + subjects + ".");
     }

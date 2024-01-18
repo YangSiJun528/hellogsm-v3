@@ -14,9 +14,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -26,6 +29,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Getter
 @Entity
@@ -34,15 +39,18 @@ import lombok.Setter;
 public abstract class AbstractApplication implements Comparable<AbstractApplication> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
   protected UUID id;
 
   // 지원자 개인정보를 담는 데이터, 단순히 많은 데이터를 가지고 있는다.
   @NotNull
   @OneToOne(fetch = FetchType.EAGER, optional = false)
+  @Cascade(value = CascadeType.ALL)
   protected AbstractPersonalInformation personalInformation;
 
   @NotNull
   @OneToOne(fetch = FetchType.EAGER, optional = false)
+  @Cascade(value = CascadeType.ALL)
   protected AbstractMiddleSchoolGrade gradeCard;
   // 중학교 성적 데이터를 담는 객체
 
@@ -96,10 +104,11 @@ public abstract class AbstractApplication implements Comparable<AbstractApplicat
 
   @NotNull
   @OneToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "applicant_id")
   protected Applicant applicant;
 
   protected AbstractApplication(
-      @NonNull UUID id,
+      UUID id,
       @NonNull AbstractPersonalInformation personalInformation,
       @NonNull AbstractMiddleSchoolGrade gradeCard,
       @NonNull AbstractApplicationStatusParameter parameter,

@@ -10,13 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class MiddleSchoolTranscriptConverterTest {
 
-  public MiddleSchoolTranscript validTranscript; // 원래 private 인데 임시로 MiddleSchoolTranscript 공유하기 위해 사용
+  // 임시로 MiddleSchoolTranscript 공유하기 위해 복제함
+
+  public MiddleSchoolTranscript validTranscript;
 
   private static final SemesterType semesterType = SemesterType.GRADE_1_1_FREE_SEMESTER;
   private static final List<String> semesters = semesterType.getSemesters();
@@ -28,7 +27,6 @@ public class MiddleSchoolTranscriptConverterTest {
     subjects.addAll(MiddleSchoolTranscript.CURRICULUM_DEFAULT_SUBJECTS);
   }
 
-  @BeforeEach
   public void setUp() {
     // 예체능, 비교과 점수 생성
     validTranscript = new MiddleSchoolTranscript(
@@ -106,21 +104,5 @@ public class MiddleSchoolTranscriptConverterTest {
 
 
   MiddleSchoolTranscriptConverter converter = new MiddleSchoolTranscriptConverter();
-
-  @Test
-  public void convertToDatabaseColumn() {
-    Assertions.assertDoesNotThrow(() -> {
-      var converted = converter.convertToDatabaseColumn(validTranscript);
-      System.out.println(converted);
-    });
-  }
-
-  @Test
-  public void convertToEntityAttribute() {
-    var converted = converter.convertToDatabaseColumn(validTranscript);
-    var original = converter.convertToEntityAttribute(converted);
-    Assertions.assertNotNull(original);
-    System.out.println(original);
-  }
 
 }

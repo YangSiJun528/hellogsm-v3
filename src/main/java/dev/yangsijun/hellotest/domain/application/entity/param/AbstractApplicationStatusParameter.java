@@ -17,7 +17,7 @@ public record AbstractApplicationStatusParameter(
     @NonNull DesiredMajors desiredMajors,
     @Nullable Major finalMajor) {
 
-  static AbstractApplicationStatusParameter init(DesiredMajors desiredMajors) {
+  public static AbstractApplicationStatusParameter init(DesiredMajors desiredMajors) {
     return AbstractApplicationStatusParameter.builder()
         .finalSubmitted(false)
         .printsArrived(false)

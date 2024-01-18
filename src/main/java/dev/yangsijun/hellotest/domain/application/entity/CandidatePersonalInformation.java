@@ -19,8 +19,8 @@ public final class CandidatePersonalInformation extends AbstractPersonalInformat
 
   private String teacherPhoneNumber;
 
-  CandidatePersonalInformation(
-      @NonNull UUID id,
+  public CandidatePersonalInformation(
+      UUID id,
       @NonNull AbstractPersonalInformationParameter superParameter,
       @NonNull String schoolName,
       @NonNull String schoolLocation,

@@ -3,6 +3,8 @@ package dev.yangsijun.hellotest.domain.application.entity;
 import dev.yangsijun.hellotest.domain.application.entity.param.AbstractPersonalInformationParameter;
 import dev.yangsijun.hellotest.domain.application.type.GraduationStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -18,7 +20,7 @@ import lombok.NonNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class AbstractPersonalInformation {
 
-  @Id
+  @Id @GeneratedValue(strategy = GenerationType.UUID)
   protected UUID id;
 
   protected String applicantImageUri;
@@ -35,7 +37,7 @@ public abstract class AbstractPersonalInformation {
 
   protected String relationWithApplicant;
 
-  protected AbstractPersonalInformation(@NonNull UUID id, @NonNull AbstractPersonalInformationParameter parameter) {
+  protected AbstractPersonalInformation(UUID id, @NonNull AbstractPersonalInformationParameter parameter) {
     this.id = id;
     this.applicantImageUri = parameter.getApplicantImageUri();
     this.address = parameter.getAddress();

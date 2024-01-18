@@ -51,8 +51,8 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade
   private BigDecimal totalScore; // 합계 - 환산총점
 
 
-  private CandidateMiddleSchoolGrade(
-      @NonNull UUID id,
+  public CandidateMiddleSchoolGrade(
+      UUID id,
       @NonNull CandidateMiddleSchoolGradeParameter parameter) {
     super(id, parameter.getPercentileRank());
     this.transcript = parameter.getTranscript();

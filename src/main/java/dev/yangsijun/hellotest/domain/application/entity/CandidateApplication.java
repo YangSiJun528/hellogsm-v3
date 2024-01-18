@@ -12,8 +12,8 @@ import lombok.NonNull;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class CandidateApplication extends AbstractApplication {
-  private CandidateApplication(
-      @NonNull UUID id,
+  public CandidateApplication(
+      UUID id,
       @NonNull CandidatePersonalInformation personalInformation,
       @NonNull CandidateMiddleSchoolGrade gradeCard,
       @NonNull AbstractApplicationStatusParameter statusParam,

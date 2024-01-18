@@ -3,6 +3,7 @@ package dev.yangsijun.hellotest.domain.application.entity;
 import dev.yangsijun.hellotest.domain.application.entity.convert.MiddleSchoolTranscriptConverter;
 import dev.yangsijun.hellotest.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import dev.yangsijun.hellotest.domain.application.type.MiddleSchoolTranscript;
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade
   // 근데 이거 자율학기제/학년제 때문에 다른 상태를 가질수도 있음
   // 리스트나 그련 형태를 가지는게 좋을거 같음
 
+  @Column(columnDefinition = "TEXT")
   @Convert(converter = MiddleSchoolTranscriptConverter.class)
   private MiddleSchoolTranscript transcript;// 중학교 성적증명서
 

@@ -3,9 +3,11 @@ package dev.yangsijun.hellotest;
 import dev.yangsijun.hellotest.domain.applicant.entity.Applicant;
 import dev.yangsijun.hellotest.domain.applicant.repo.ApplicantRepo;
 import dev.yangsijun.hellotest.domain.applicant.type.Gender;
+import dev.yangsijun.hellotest.domain.application.entity.AbstractApplication;
 import dev.yangsijun.hellotest.domain.application.entity.CandidateApplication;
 import dev.yangsijun.hellotest.domain.application.entity.CandidateMiddleSchoolGrade;
 import dev.yangsijun.hellotest.domain.application.entity.CandidatePersonalInformation;
+import dev.yangsijun.hellotest.domain.application.entity.convert.MiddleSchoolTranscriptConverter;
 import dev.yangsijun.hellotest.domain.application.entity.convert.MiddleSchoolTranscriptConverterTest;
 import dev.yangsijun.hellotest.domain.application.entity.param.AbstractApplicationStatusParameter;
 import dev.yangsijun.hellotest.domain.application.entity.param.AbstractPersonalInformationParameter;
@@ -36,6 +38,8 @@ public class Tester implements CommandLineRunner {
 
   @Autowired
   private ApplicantRepo applicantRepo;
+
+  private MiddleSchoolTranscriptConverter converter = new MiddleSchoolTranscriptConverter();
 
   private MiddleSchoolTranscriptConverterTest test = new MiddleSchoolTranscriptConverterTest(); // MiddleSchoolTranscript 가져오기 위해서 사용
 
@@ -102,12 +106,16 @@ public class Tester implements CommandLineRunner {
         applicant
     );
 
-    appRepo.save(app); // 여기서 버그 발생함, transcript의 Stirng <-> Enum 변환화는 과정에서 에러가 나는데, 따로 테스트하면 에러가 안났음
+    appRepo.save(app);
 
-    var apps = appRepo.findAll();
+    List<AbstractApplication> apps = appRepo.findAll();
 
-    if(!apps.get(0).equals(app)) {
-      throw new RuntimeException("Test 실패");
+    if(!apps.get(0).getApplicant().getId().equals(app.getApplicant().getId())) {
+      throw new RuntimeException("테스트 실패");
+    } else {
+      System.out.println("테스트 성공");
+      var t = ((CandidateMiddleSchoolGrade) apps.get(0).getGradeCard()).getTranscript();
+      System.out.println(converter.convertToDatabaseColumn(t));
     }
   }
 }

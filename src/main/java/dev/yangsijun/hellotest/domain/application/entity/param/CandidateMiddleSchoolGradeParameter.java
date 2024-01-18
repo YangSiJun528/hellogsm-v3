@@ -9,7 +9,7 @@ import lombok.NonNull;
 @Getter
 public final class CandidateMiddleSchoolGradeParameter {
 
-  private final String transcript;
+  private final MiddleSchoolTranscript transcript;
 
   private final BigDecimal percentileRank;
 
@@ -37,7 +37,7 @@ public final class CandidateMiddleSchoolGradeParameter {
 
   @Builder
   public CandidateMiddleSchoolGradeParameter(
-      @NonNull String transcript,
+      @NonNull MiddleSchoolTranscript transcript,
       @NonNull BigDecimal percentileRank,
       @NonNull BigDecimal grade1Semester1Score,
       @NonNull BigDecimal grade1Semester2Score,
